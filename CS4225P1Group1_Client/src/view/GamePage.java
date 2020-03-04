@@ -1,30 +1,70 @@
 package view;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
+import controller.GamePageController;
+import controller.MainPageController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
-import model.Message;
+import javafx.scene.text.Text;
 
 public class GamePage {
 
+	private ArrayList<String> lettersGuessed;
 
-    @FXML
-    private TextArea outputTextArea;
-    
-    @FXML
-    private Button sendButton;
-    
-    @FXML
-    void handleSendClicked(MouseEvent event) throws IOException {
-    	
-    	Message message = new Message("Test Message");
-    	var test = message.getSerializedMessage();
-    	var message1 = message.getUnserializedMessage(test);
-    	this.outputTextArea.setText(message1.getMessage());
-    	
-    }
-    
+	private GamePageController controller;
+
+	@FXML
+	private TextArea letterToGuessTextArea;
+
+	@FXML
+	private Button guessButton;
+
+	@FXML
+	private Label wordToGuessLabel;
+
+	@FXML
+	private Label errorMessageLabel;
+
+	@FXML
+	private Label usedLabel;
+
+	@FXML
+	private Text lettersUsedText;
+
+	@FXML
+	private TextArea guessLeftTextArea;
+
+	@FXML
+	void handleSendClicked(MouseEvent event) {
+		if (this.letterToGuessTextArea.getText().length() > 1) {
+			this.errorMessageLabel.setVisible(true);
+		} else {
+			var result = this.controller.makeGuess(this.letterToGuessTextArea.getText());
+			if (this.controller.checkIfGuessWasMade(result)) {
+				this.guessLeftTextArea.setText(result);
+			} else {
+				this.wordToGuessLabel.setText(result);
+			}
+		}
+
+	}
+
+	/**
+	 * Initializes the instance of the log in page
+	 * 
+	 * @precondition none
+	 * @postcondition the page is initialized
+	 */
+	@FXML
+	void initialize() {
+		this.controller = new GamePageController();
+		this.lettersGuessed = new ArrayList<String>();
+		this.errorMessageLabel.setVisible(false);
+
+	}
+
 }

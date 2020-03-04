@@ -6,11 +6,11 @@ import model.Message;
 public class MainPageController {
 	public static final String HOST = "localhost";
 	public static final int PORT = 4225;
-	private Client client;
+	public static Client client;
 	
 	public MainPageController() {
-		this.client = new Client(HOST, PORT);
-		this.client.openPort();
+		client = new Client(HOST, PORT);
+		client.openPort();
 	}
 	
 	public boolean validateLoginCredentials(String username, String password) {
@@ -18,10 +18,11 @@ public class MainPageController {
 			password = " ";
 		}
 		var message = new Message("Login---user:" + username + " pass:" + password);
-		this.client.sendMessage(message.getSerializedMessage());
+		client.sendMessage(message.getSerializedMessage());
 		
-		var messageRecieved = this.client.receiveMessage();
+		var messageRecieved = client.receiveMessage();
 		
+		System.out.println("MESSAGE: " + messageRecieved.getMessage());
 		return messageRecieved.getMessage().equals("valid");
 	}
 
