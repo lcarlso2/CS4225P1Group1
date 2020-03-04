@@ -12,7 +12,7 @@ public class GamePageController {
 		return unserializedMessage.getMessage();
 	}
 	
-	public boolean checkIfGuessWasMade(String message) {
+	public boolean checkIfGuessWasAlreadyMade(String message) {
 		return message.startsWith("You already guessed ");
 	}
 	

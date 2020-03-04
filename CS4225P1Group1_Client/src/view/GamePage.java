@@ -44,7 +44,7 @@ public class GamePage {
 			this.errorMessageLabel.setVisible(true);
 		} else {
 			var result = this.controller.makeGuess(this.letterToGuessTextArea.getText());
-			if (this.controller.checkIfGuessWasMade(result)) {
+			if (this.controller.checkIfGuessWasAlreadyMade(result)) {
 				this.guessLeftTextArea.setText(result);
 			} else if (this.controller.checkIfWrongGuessWasMade(result)){
 				this.guessLeftTextArea.setText(result);
