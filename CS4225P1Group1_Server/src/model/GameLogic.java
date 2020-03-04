@@ -23,7 +23,6 @@ public class GameLogic {
 		if (this.checkIfLetterWasAlreadyGuessed(guess)) {
 			return "You already guessed " + guess;
 		}
-		this.guesses -= 1;
 		var correct = false;
 		for (int i = 0; i < this.wordToGuess.length; i++) {
 			if (this.wordToGuess[i] == guess) {
@@ -35,6 +34,7 @@ public class GameLogic {
 		if (correct) {
 			return new String(this.correctLettersSoFar);
 		} else {
+			this.guesses -= 1;
 			return "Uh-oh, you guessed wrong. You have " + (this.guesses) + " guess(es) left";
 		}
 	}

@@ -16,5 +16,10 @@ public class GamePageController {
 		return message.startsWith("You already guessed ");
 	}
 	
+	public boolean checkIfWrongGuessWasMade(String message) {
+		return message.startsWith("Uh-oh");
+	}
+
+	
 
 }

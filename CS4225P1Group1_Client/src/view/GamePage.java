@@ -46,6 +46,8 @@ public class GamePage {
 			var result = this.controller.makeGuess(this.letterToGuessTextArea.getText());
 			if (this.controller.checkIfGuessWasMade(result)) {
 				this.guessLeftTextArea.setText(result);
+			} else if (this.controller.checkIfWrongGuessWasMade(result)){
+				this.guessLeftTextArea.setText(result);
 			} else {
 				this.wordToGuessLabel.setText(result);
 			}
