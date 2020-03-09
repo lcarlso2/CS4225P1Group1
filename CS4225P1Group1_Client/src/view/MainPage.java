@@ -18,7 +18,7 @@ import javafx.scene.text.Text;
  */
 public class MainPage extends Page {
 
-	private static String currentUserName;
+	
 	
 	private MainPageController controller;
 
@@ -45,8 +45,7 @@ public class MainPage extends Page {
 		this.errorMessageLabel.setText("Invalid login");
 		var result = this.controller.validateLoginCredentials(this.usernameTextField.getText(),
 				this.passwordTextField.getText());
-		if (result.equals("valid")) {
-			currentUserName = this.usernameTextField.getText();
+		if (result.startsWith("valid")) {
 			this.handleMouseClickToNavigateToDifferentPage(event, Main.GAME_PAGE_VIEW);
 		} else if (result.startsWith("Error")) {
 			this.errorMessageLabel.setText(result);
@@ -85,12 +84,5 @@ public class MainPage extends Page {
 		this.errorMessageLabel.setVisible(false);
 	}
 	
-	/**
-	 * Gets the current users user name
-	 * @return the user name
-	 */
-	public static String getCurrentUserName() {
-		return currentUserName;
-	}
-
+	
 }

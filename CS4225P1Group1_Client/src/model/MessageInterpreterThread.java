@@ -45,7 +45,12 @@ public class MessageInterpreterThread implements Runnable {
 				try {
 					var message = MainPageController.getClient().getMiscMessages().remove();
 					System.out.println("INSIDE RUN IDLE OF INTERPRETER: " + message.getMessage());
-					Platform.runLater(() -> GamePageController.setServerResponse(message.getMessage()));
+					if (message.getMessage().contains("&")) {
+						Platform.runLater(() -> GamePageController.setWordBeingGuessed(message.getMessage().split("&")[1]));
+					}
+					Platform.runLater(() -> GamePageController.setServerResponse(message.getMessage().split("##")[0]));
+					
+					
 				} catch (Exception ex) {
 
 				}

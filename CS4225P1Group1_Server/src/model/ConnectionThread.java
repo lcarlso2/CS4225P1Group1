@@ -39,9 +39,9 @@ public class ConnectionThread implements Runnable {
 		if (users.validateCredentials(username, password)) {
 			if (Main.GAME.addPlayer(username)) {
 				Server.getClients().add(this);
-				return "valid";
+				return "valid****word:" + Main.GAME.getCorrectLettersSoFar();
 			} else {
-				return "Error. Player already signed in.";
+				return "Error" + System.lineSeparator() + "Player already playing";
 			}
 		} else {
 			return "invalid";
@@ -49,7 +49,25 @@ public class ConnectionThread implements Runnable {
 	}
 
 	private String handleGuess(char guess) {
-		return Main.GAME.makeGuess(guess);
+		if (Main.GAME.checkIfLetterWasAlreadyGuessed(guess)) {
+			return "You already guessed " + guess;
+		}
+		
+		var wasGuessRight = Main.GAME.makeGuess(guess);
+		
+		if (Main.GAME.getGuessesLeft() == 0) {
+			return "Guesses all used. Game over.";
+		}
+		
+		if (Main.GAME.checkIfGameIsOver()) {
+			return "You won!!!!:" + Main.GAME.getCorrectLettersSoFar();
+		}
+		
+		if (wasGuessRight) {
+			return new String(Main.GAME.getCorrectLettersSoFar());
+		} else {
+			return "Uh-oh, you guessed wrong." + System.lineSeparator() + "You have " + (Main.GAME.getGuessesLeft()) + " guess(es) left";
+		}
 	}
 
 	/**
@@ -88,13 +106,15 @@ public class ConnectionThread implements Runnable {
 				Message incomingMessage = Message.getUnserializedMessage(messageSerialized);
 
 				var messageType = incomingMessage.getMessage().split("---")[0];
-				if (messageType.equals("Login")) {
+				if (messageType.equals("LOGIN")) {
 					this.handleLogin(incomingMessage);
-				} else if (messageType.equals("Guess")) {
-					var guess = incomingMessage.getMessage().split("---")[1];
+				} else if (messageType.equals("GUESS")) {
+					var guess = incomingMessage.getMessage().split("---")[1].split(":")[1];
+					var username = incomingMessage.getMessage().split("---")[1].split(":")[0];
 					var result = this.handleGuess(guess.toCharArray()[0]);
-					this.sendMessageBack("guess---" + result);
-				} else if (messageType.equals("Logout")) {
+					this.sendMessageBack("GUESS---" + result);
+					Server.sendAll(username + " just guessed: " + guess + System.lineSeparator() + "Guesses left " + Main.GAME.getGuessesLeft() + "##word&" + Main.GAME.getCorrectLettersSoFar(), this);
+				} else if (messageType.equals("QUIT")) {
 					this.logout(incomingMessage);
 				}
 			}
@@ -108,8 +128,8 @@ public class ConnectionThread implements Runnable {
 
 	private void handleLogin(Message incomingMessage) throws IOException {
 		var result = this.login(incomingMessage);
-		this.sendMessageBack("login---" + result);
-		if (result.equals("valid")) {
+		this.sendMessageBack("LOGIN---" + result);
+		if (result.startsWith("valid")) {
 			Server.sendAll("server---" + this.getUserName(incomingMessage) + " has joined the game.",
 					this);
 		}

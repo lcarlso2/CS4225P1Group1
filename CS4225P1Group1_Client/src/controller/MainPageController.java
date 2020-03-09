@@ -1,7 +1,7 @@
 package controller;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+
 
 import model.Client;
 import model.Message;
@@ -19,6 +19,18 @@ public class MainPageController {
 	private static Client client;
 	private static MessageInterpreterThread messageInterpreter;
 	private static Thread[] pool = new Thread[2];
+	private static String wordToGuess;
+	
+	private static String currentUserName;
+	
+	/**
+	 * Gets the current users user name
+	 * @return the user name
+	 */
+	public static String getCurrentUserName() {
+		return currentUserName;
+	}
+
 
 	/**
 	 * Gets the client
@@ -29,6 +41,16 @@ public class MainPageController {
 	 */
 	public static Client getClient() {
 		return client;
+	}
+	
+	/**
+	 * Gets the word to be guessed
+	 * @precondition none
+	 * @postcondition none
+	 * @return the word to be guessed
+	 */
+	public static String getWordToGuess() {
+		return wordToGuess;
 	}
 
 	/**
@@ -68,16 +90,14 @@ public class MainPageController {
 		if (password.isEmpty()) {
 			password = " ";
 		}
-		var message = new Message("Login---user:" + username + " pass:" + password);
+		var message = new Message("LOGIN---user:" + username + " pass:" + password);
 		client.sendMessage(message.getSerializedMessage());
 
 		Message messageRecieved = null;
 
 		
-		try {
-			TimeUnit.SECONDS.sleep(1);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		while (MainPageController.getClient().getLoginMessages().isEmpty()) {
+			System.out.println("waiting in login...");
 		}
 
 		try {
@@ -87,8 +107,10 @@ public class MainPageController {
 		}
 
 		if (messageRecieved != null) {
-			if (messageRecieved.getMessage().equals("valid")) {
+			if (messageRecieved.getMessage().startsWith("valid")) {
+				currentUserName = username;
 				messageInterpreter.setRunIdle(true);
+				wordToGuess = messageRecieved.getMessage().split(":")[1];
 			}
 			return messageRecieved.getMessage();
 		} else {

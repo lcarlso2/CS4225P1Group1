@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import model.Message;
 
@@ -11,38 +12,55 @@ import model.Message;
 public class GamePageController {
 	
 	private static TextArea serverResponse;
+	
+	private static Label wordToGuess;
 
 	/**
 	 * Creates a new game page controller with the specified output text area
 	 * @param output the output
+	 * @param wordToBeGuessed the word being guessed
 	 * @precondition none
 	 * @postcondition a new controller is created
 	 */
-	public GamePageController(TextArea output) {
+	public GamePageController(TextArea output, Label wordToBeGuessed) {
 		serverResponse = output;
+		wordToGuess = wordToBeGuessed;
 	}
 	
 	/**
 	 * Sets the servers response text area
 	 * @param response the response from the server
 	 * @precondition none
-	 * @postcondition none
+	 * @postcondition the server response is set
 	 */
 	public static void setServerResponse(String response) {
 		serverResponse.setText(response);
 	}
+	
+	/**
+	 * Sets the word being guessed
+	 * @param word the word being guessed
+	 * @precondition none
+	 * @postcondition the word is set 
+	 */
+	public static void setWordBeingGuessed(String word) {
+		wordToGuess.setText(word);
+	}
+	
+	
 	/**
 	 * Sends a guess to the server
 	 * @param letterToGuess the letter being guessed
 	 * @return the response from the server
 	 */
 	public String makeGuess(String letterToGuess) {
-		var message = new Message("Guess---" + letterToGuess);
+		var message = new Message("GUESS---" + MainPageController.getCurrentUserName() + ":" + letterToGuess);
+
 		MainPageController.getClient().sendMessage(message.getSerializedMessage());
 		
 		Message messageRecieved = null;
 		while (MainPageController.getClient().getGameMessages().isEmpty()) {
-			System.out.println("Stuck");
+			System.out.println("waiting in guess...");
 		}
 	
 		try {
@@ -78,13 +96,22 @@ public class GamePageController {
 	}
 	
 	/**
+	 * Checks if the game is over
+	 * @param message the message from the server
+	 * @return true if the game is over
+	 */
+	public boolean checkIfGameIsOver(String message) {
+		return message.contains("Game over") || message.contains("You won");
+	}
+	
+	/**
 	 * Logs the user out 
 	 * @param username the current user's username
 	 * @precondition none
 	 * @postcondition the user is logged out
 	 */
 	public void logout(String username) {
-		var message = new Message("Logout---user:" + username + " ");
+		var message = new Message("QUIT---user:" + username + " ");
 		MainPageController.getClient().sendMessage(message.getSerializedMessage());
 		MainPageController.endListeningThread();
 		

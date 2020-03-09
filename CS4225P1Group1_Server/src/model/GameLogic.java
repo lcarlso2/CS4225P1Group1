@@ -12,55 +12,119 @@ public class GameLogic {
 	private static volatile HashMap<String, Boolean> players;
 	private char[] wordToGuess;
 	private char[] correctLettersSoFar;
-	private ArrayList<String> lettersGuessedSoFar;
+	private ArrayList<String> lettersUsedSoFar;
 	private int guesses;
 
 	/**
 	 * A new game logic object is created with the given word to guess
 	 * @precondition none
 	 * @postcondition the game logic object is created 
-	 * @param wordToGuess the word to be guessed
+	 * @param wordBeingGuessed the word to be guessed
 	 */
-	public GameLogic(char[] wordToGuess) {
+	public GameLogic(char[] wordBeingGuessed) {
 		players = new HashMap<String, Boolean>();
 		this.guesses = 5;
-		this.wordToGuess = wordToGuess;
-		this.lettersGuessedSoFar = new ArrayList<String>();
+		this.wordToGuess = wordBeingGuessed;
+		this.lettersUsedSoFar = new ArrayList<String>();
 		this.correctLettersSoFar = new char[this.wordToGuess.length];
 
 		for (int i = 0; i < this.wordToGuess.length; i++) {
 			this.correctLettersSoFar[i] = '_';
 		}
 	}
+	
+	/**
+	 * Gets the word being guessed
+	 * @precondition none
+	 * @postcondition none
+	 * @return the word being guessed
+	 */
+	public String getWordBeingGuessed() {
+		return new String(this.wordToGuess);
+	}
+	
+	/**
+	 * Gets the guesses left
+	 * @return the guesses left
+	 */
+	public int getGuessesLeft() {
+		return this.guesses;
+	}
+	
+	/**
+	 * Checks if all the letters have been guessed. 
+	 * @return Returns true if they have otherwise false
+	 */
+	public boolean checkIfGameIsOver() {
+		for (var current : this.correctLettersSoFar) {
+			if (current == '_') {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Gets correct Letters So Far
+	 * @precondition none
+	 * @postcondition none
+	 * @return correct Letters So Far
+	 */
+	public String getCorrectLettersSoFar() {
+		return new String(this.correctLettersSoFar);
+	}
+	
+	/**
+	 * Gets letters used so far
+	 * @precondition none
+	 * @postcondition none
+	 * @return the letters used to far
+	 */
+	public ArrayList<String> getLettersUsedSoFar() {
+		return this.lettersUsedSoFar;
+	}
 
 	/**
 	 * Check if the given char is in the word
 	 * @param guess the letter being guessed
-	 * @return If the word contains the char then the word with '_' for non guessed words is returned, otherwise 
-	 * a message stating the guess is incorrect
+	 * @return true if the word was in the word
 	 */
-	public String makeGuess(char guess) {
-		if (this.checkIfLetterWasAlreadyGuessed(guess)) {
-			return "You already guessed " + guess;
-		}
-		var correct = false;
+	public boolean makeGuess(char guess) {
+//		if (this.checkIfLetterWasAlreadyGuessed(guess)) {
+//			//return "You already guessed " + guess;
+//			return false;
+//		}
+		var wasGuessRight = false;
 		for (int i = 0; i < this.wordToGuess.length; i++) {
 			if (this.wordToGuess[i] == guess) {
-				correct = true;
+				wasGuessRight = true;
 				this.correctLettersSoFar[i] = guess;
 			}
 		}
-		this.lettersGuessedSoFar.add(String.valueOf(guess));
-		if (correct) {
-			return new String(this.correctLettersSoFar);
-		} else {
+		this.lettersUsedSoFar.add(String.valueOf(guess));
+		
+		if (!wasGuessRight) {
 			this.guesses -= 1;
-			return "Uh-oh, you guessed wrong. You have " + (this.guesses) + " guess(es) left";
 		}
+		
+		return wasGuessRight;
+		
+//		if (correct) {
+//			return new String(correctLettersSoFar);
+//		} else {
+//			this.guesses -= 1;
+//			return "Uh-oh, you guessed wrong. You have " + (this.guesses) + " guess(es) left";
+//		}
 	}
 
-	private boolean checkIfLetterWasAlreadyGuessed(char letter) {
-		for (var current : this.lettersGuessedSoFar) {
+	/**
+	 * Checks if the letter being guessed was already guessed
+	 * @param letter the letter being checked
+	 * 
+	 * @return true if it was guessed, otherwise false
+	 */
+	public boolean checkIfLetterWasAlreadyGuessed(char letter) {
+		for (var current : this.lettersUsedSoFar) {
 			if (current.equals(String.valueOf(letter))) {
 				return true;
 			}

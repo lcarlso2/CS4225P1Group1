@@ -160,14 +160,13 @@ public class Client implements Runnable {
 		while (this.keepListening) {
 			var message = this.receiveMessage();
 			System.out.println("Recieved Message: " + message.getMessage());
-			if (message.getMessage().startsWith("login")) {
+			if (message.getMessage().startsWith("LOGIN")) {
 				message.stripMessageOfType();
 				this.loginMessages.add(message);
-			} else if (message.getMessage().startsWith("guess")) {
+			} else if (message.getMessage().startsWith("GUESS")) {
 				message.stripMessageOfType();
 				this.gameMessages.add(message);
 			} else {
-				message.stripMessageOfType();
 				this.miscMessages.add(message);
 			}
 		}
