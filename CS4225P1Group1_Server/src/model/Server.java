@@ -1,21 +1,23 @@
 package model;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
+import java.util.ArrayList;
+import java.util.concurrent.Executors;
 
-import io.FileReader;
-
+/**
+ * The server class responsible for getting connecting to the client
+ * 
+ * @author Lucas Carlson, Tyler Scott, and Dexter Tarver
+ * 
+ *         References :
+ *         https://stackoverflow.com/questions/13115784/sending-a-message-to-all-clients-client-server-communication
+ *
+ */
 public class Server {
-
-	private static GameLogic game;
 	private static int port;
 	private ServerSocket serverSocket;
-	private Socket clientSocket;
-	private ObjectInputStream incomingMessages;
-	private ObjectOutputStream outgoingMessages;
+	private static ArrayList<ConnectionThread> clients;
 
 	/**
 	 * Creates a new Server with a specific port to use when it runs
@@ -23,13 +25,18 @@ public class Server {
 	 * @param connectionPort the port to use when the server runs
 	 */
 	public Server(int connectionPort) {
-		
-		game = new GameLogic("fantastic".toCharArray());
 		port = connectionPort;
+		clients = new ArrayList<ConnectionThread>();
 		this.serverSocket = null;
-		this.clientSocket = null;
-		this.incomingMessages = null;
-		this.outgoingMessages = null;
+
+	}
+	
+	/**
+	 * Gets the clients 
+	 * @return the clients
+	 */
+	public static ArrayList<ConnectionThread> getClients() {
+		return clients;
 	}
 
 	/**
@@ -47,31 +54,19 @@ public class Server {
 		}
 		try {
 
-			this.clientSocket = this.serverSocket.accept();
-			this.incomingMessages = new ObjectInputStream(this.clientSocket.getInputStream());
-			this.outgoingMessages = new ObjectOutputStream(this.clientSocket.getOutputStream());
-
+			var pool = Executors.newCachedThreadPool();
 			while (true) {
-				byte[] messageSerialized = (byte[]) this.incomingMessages.readObject();
-
-				Message incomingMessage = Message.getUnserializedMessage(messageSerialized);
-
-				var messageType = incomingMessage.getMessage().split("---")[0];
-				if (messageType.equals("Login")) {
-					var result = this.handleLogin(incomingMessage);
-					this.sendResultBack(result);
-				} else if (messageType.equals("Guess")) {
-					var guess = incomingMessage.getMessage().split("---")[1];
-					var result = this.handleGuess(guess.toCharArray()[0]);
-					this.sendResultBack(result);
-				}
+				var clientSocket = this.serverSocket.accept();
+				var serverThread = new ConnectionThread(clientSocket);
+				//clients.add(serverThread);
+				pool.execute(serverThread);
 			}
 
-		} catch (IOException e) {
-			System.err.println("IOException:  " + e);
-		} catch (ClassNotFoundException e) {
-			System.err.println("Class not found:  " + e);
+		} catch (IOException ex) {
+
+			ex.printStackTrace();
 		}
+
 		try {
 			this.close();
 		} catch (IOException e) {
@@ -79,33 +74,29 @@ public class Server {
 		}
 	}
 
-	private String handleLogin(Message message) {
-		var messageSplitUserData = message.getMessage().split("---")[1];
-		var username = messageSplitUserData.split(" ")[0].split(":")[1];
-		var password = messageSplitUserData.split(" ")[1].split(":")[1];
-		var reader = new FileReader();
-		var users = reader.GetUsers("src/data/users.txt");
-		if (users.ValidateCredentials(username, password)) {
-			return "valid";
-		} else {
-			return "invalid";
-		}
-	}
-	
-	private String handleGuess(char guess) {
-		return game.makeGuess(guess);
-	}
-
-	private void sendResultBack(String result) throws IOException {
-		var returnMessage = new Message(result);
-		this.outgoingMessages.writeObject(returnMessage.getSerializedMessage());
-	}
-
 	private void close() throws IOException {
 		this.serverSocket.close();
-		this.clientSocket.close();
-		this.incomingMessages.close();
-		this.outgoingMessages.close();
+	}
+
+	/**
+	 * Sends the given message to all clients other than the one calling the function
+	 * 
+	 * @param message the message 
+	 * @param clientRequestOriginatedFrom the client the request originated from
+	 * @precondition none
+	 * @postcondition the message is sent
+	 */
+	public static void sendAll(String message, ConnectionThread clientRequestOriginatedFrom) {
+		System.out.println("MESSAGE BEING SENT BACK BY SERVER: " + message);
+		for (var current : clients) {
+			if (!current.equals(clientRequestOriginatedFrom)) {
+				try {
+					current.sendMessageBack(message);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 }

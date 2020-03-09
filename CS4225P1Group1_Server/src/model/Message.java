@@ -7,6 +7,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+/**
+ * The class responsible for keeping track of the message object that implements Serializable 
+ * @author Lucas Carlson, Dexter Tarver, and Tyler Scott
+ *
+ */
 public class Message implements Serializable {
 
 	/**
@@ -16,14 +21,32 @@ public class Message implements Serializable {
 
 	private String message;
 
+	
+	/**
+	 * Creates a new message with the specified message
+	 * @precondition none
+	 * @postcondition the message is created
+	 * @param message the message
+	 */
 	public Message(String message) {
 		this.message = message;
 	}
 	
+	/**
+	 * Gets the message
+	 * @return the message
+	 */
 	public String getMessage() {
 		return this.message;
 	}
 
+	/**
+	 * Gets the serialized message in an array of bytes
+	 * @precondition none
+	 * @postcondition none
+	 * 
+	 * @return the serialized message
+	 */
 	public byte[] getSerializedMessage() {
 		try {
 			ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
@@ -39,6 +62,11 @@ public class Message implements Serializable {
 		}
 	}
 
+	/**
+	 * Gets the unserialized message 
+	 * @param byteArray the byte array the message is being unserialized from
+	 * @return the message
+	 */
 	public static Message getUnserializedMessage(byte[] byteArray) {
 		try {
 			ByteArrayInputStream byteIn = new ByteArrayInputStream(byteArray);

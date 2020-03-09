@@ -8,9 +8,19 @@ import java.util.Scanner;
 import model.User;
 import model.Users;
 
+/**
+ * The class responsible for reading files
+ * @author Lucas Carlson, Dexter Tarver, and Tyler Scott
+ *
+ */
 public class FileReader {
 	
-	public Users GetUsers(String fileName) {
+	/**
+	 * Gets the users from the file
+	 * @param fileName the file name
+	 * @return the users
+	 */
+	public Users getUsers(String fileName) {
 		var file = new File(fileName);
 		var users = this.readFile(file);
 		return new Users(users);

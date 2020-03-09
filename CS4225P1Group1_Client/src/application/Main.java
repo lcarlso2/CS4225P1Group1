@@ -6,6 +6,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
+/**
+ * The main entry point for the program
+ * 
+ * @author Lucas Carlson, Dexter Tarver, and Tyler Scott
+ *
+ */
 public class Main extends Application {
 	
 	public static final String MAIN_PAGE_TITLE = "Play Hangman!";
@@ -22,11 +28,17 @@ public class Main extends Application {
 			primaryStage.setTitle(MAIN_PAGE_TITLE);
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Launches the program
+	 * @param args the arguments
+	 * @precondition none
+	 * @postcondition the program is launched
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}

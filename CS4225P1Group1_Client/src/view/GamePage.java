@@ -1,9 +1,10 @@
 package view;
 
-import java.util.ArrayList;
 
+import java.io.IOException;
+
+import application.Main;
 import controller.GamePageController;
-import controller.MainPageController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,9 +12,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
-public class GamePage {
+/**
+ * The game page class that extends the page class 
+ *  @author Tyler Scott, Dexter Tarver, and Lucas Carlson
+ *
+ */
+public class GamePage extends Page {
 
-	private ArrayList<String> lettersGuessed;
 
 	private GamePageController controller;
 
@@ -36,7 +41,10 @@ public class GamePage {
 	private Text lettersUsedText;
 
 	@FXML
-	private TextArea guessLeftTextArea;
+	private TextArea serverResponseTextArea;
+
+    @FXML
+    private Button logoutButton;
 
 	@FXML
 	void handleSendClicked(MouseEvent event) {
@@ -45,14 +53,20 @@ public class GamePage {
 		} else {
 			var result = this.controller.makeGuess(this.letterToGuessTextArea.getText());
 			if (this.controller.checkIfGuessWasAlreadyMade(result)) {
-				this.guessLeftTextArea.setText(result);
-			} else if (this.controller.checkIfWrongGuessWasMade(result)){
-				this.guessLeftTextArea.setText(result);
+				this.serverResponseTextArea.setText(result);
+			} else if (this.controller.checkIfWrongGuessWasMade(result)) {
+				this.serverResponseTextArea.setText(result);
 			} else {
 				this.wordToGuessLabel.setText(result);
 			}
 		}
 
+	}
+	
+	@FXML
+	void handLogoutClicked(MouseEvent event) throws IOException {
+		this.controller.logout(MainPage.getCurrentUserName());
+		this.handleMouseClickToNavigateToDifferentPage(event, Main.MAIN_PAGE_VIEW);
 	}
 
 	/**
@@ -63,10 +77,9 @@ public class GamePage {
 	 */
 	@FXML
 	void initialize() {
-		this.controller = new GamePageController();
-		this.lettersGuessed = new ArrayList<String>();
+		this.controller = new GamePageController(this.serverResponseTextArea);
 		this.errorMessageLabel.setVisible(false);
-
+		
 	}
 
 }
