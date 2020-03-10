@@ -66,7 +66,7 @@ public class GamePage extends Page {
 				this.wordToGuessLabel.setText(result);
 			}
 		}
-
+		this.letterToGuessTextArea.setText("");
 	}
 
 	private void handleGameOver(String result) {
