@@ -1,7 +1,6 @@
 package controller;
-
 import java.util.HashMap;
-
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -73,6 +72,16 @@ public class GamePageController {
 	public static void disableGuessButton() {
 		guessButton.setDisable(true);
 	}
+	
+	/**
+	 * Sets the guess button to enabled
+	 * 
+	 * @precondition none
+	 * @postcondition the button is enabled
+	 */
+	public static void enableGuessButton() {
+		guessButton.setDisable(false);
+	}
 
 	/**
 	 * Sends a guess to the server
@@ -98,6 +107,7 @@ public class GamePageController {
 
 		if (messageRecieved != null) {
 			System.out.println("MESSAGE: " + messageRecieved.getMessage());
+			Platform.runLater(() -> GamePageController.disableGuessButton());
 			return messageRecieved.getMessage();
 		} else {
 			return "Error: Something went wrong";

@@ -22,6 +22,17 @@ public class User {
 	}
 	
 	/**
+	 * Creates a new user with the given username 
+	 * @param user the username
+	 * @precondition none
+	 * @postcondition the user is created
+	 */
+	public User(String user) {
+		this.username = user;
+		this.password = "";
+	}
+	
+	/**
 	 * Validates the given username and password against the actual username and password
 	 * @param user the username
 	 * @param pass the password 
