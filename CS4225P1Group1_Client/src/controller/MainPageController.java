@@ -54,16 +54,15 @@ public class MainPageController {
 	}
 
 	/**
-	 * Ends the listening thread
+	 * Ends the thread
 	 * 
 	 * @precondition none
-	 * @postcondition the listening thread is terminated
+	 * @postcondition the threads are terminated
 	 */
-	public static void endListeningThread() {
+	public static void terminateThreads() {
 		try {
 			client.setKeepListening(false);
 			messageInterpreter.setTerminate(true);
-			messageInterpreter.setRunIdle(false);
 			client.close();
 			pool[0].join();
 			pool[1].join();
@@ -109,7 +108,6 @@ public class MainPageController {
 		if (messageRecieved != null) {
 			if (messageRecieved.getMessage().startsWith("valid")) {
 				currentUserName = username;
-				messageInterpreter.setRunIdle(true);
 				wordToGuess = messageRecieved.getMessage().split(":")[1];
 			}
 			return messageRecieved.getMessage();

@@ -12,20 +12,7 @@ import javafx.application.Platform;
  */
 public class MessageInterpreterThread implements Runnable {
 
-	private boolean runIdle = true;
-
 	private boolean terminate = false;
-
-	/**
-	 * Sets the run idle value
-	 * 
-	 * @param newValue the new value
-	 * @precondition none
-	 * @postcondition runIdle = newValue
-	 */
-	public void setRunIdle(boolean newValue) {
-		this.runIdle = newValue;
-	}
 
 	/**
 	 * Sets terminate value
@@ -41,22 +28,18 @@ public class MessageInterpreterThread implements Runnable {
 	@Override
 	public void run() {
 		while (!this.terminate) {
-			while (this.runIdle) {
-				try {
-					var message = MainPageController.getClient().getMiscMessages().remove();
-					var serverResponse = message.getMessage().split("##")[0];
-					var endGameMessage = this.handleGuessMadeByOtherPlayer(message, serverResponse);
-					if (!endGameMessage.isEmpty()) {
-						Platform.runLater(() -> GamePageController.setServerResponse(endGameMessage));
-					} else {
-						Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
-					}
-				} catch (Exception ex) {
-
+			try {
+				var message = MainPageController.getClient().getMiscMessages().remove();
+				var serverResponse = message.getMessage().split("##")[0];
+				var endGameMessage = this.handleGuessMadeByOtherPlayer(message, serverResponse);
+				if (!endGameMessage.isEmpty()) {
+					Platform.runLater(() -> GamePageController.setServerResponse(endGameMessage));
+				} else {
+					Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
 				}
+			} catch (Exception ex) {
 
 			}
-
 		}
 	}
 

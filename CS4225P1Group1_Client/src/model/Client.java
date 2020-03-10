@@ -10,11 +10,12 @@ import java.util.Queue;
 
 /**
  * The client class for communicating with the server
+ * 
  * @author Lucas Carlson, Dexter Tarver, and Tyler Scott
  *
  */
 public class Client implements Runnable {
-	
+
 	private boolean keepListening = true;
 	private Queue<Message> loginMessages;
 	private Queue<Message> gameMessages;
@@ -25,8 +26,6 @@ public class Client implements Runnable {
 	private Socket clientSocket;
 	private ObjectInputStream incomingMessage;
 	private ObjectOutputStream outgoingMessages;
-
-	
 
 	/**
 	 * Creates a new Client with the specified connect host and port to use
@@ -44,9 +43,10 @@ public class Client implements Runnable {
 		this.incomingMessage = null;
 		this.outgoingMessages = null;
 	}
-	
+
 	/**
 	 * Sets the keep listening value
+	 * 
 	 * @param newValue the new value
 	 * @precondition none
 	 * @postcondition keepListening = newValue
@@ -56,7 +56,8 @@ public class Client implements Runnable {
 	}
 
 	/**
-	 * Gets the login messages from the server 
+	 * Gets the login messages from the server
+	 * 
 	 * @return the login messages from the server
 	 * @precondition none
 	 * @postcondition none
@@ -64,9 +65,10 @@ public class Client implements Runnable {
 	public Queue<Message> getLoginMessages() {
 		return this.loginMessages;
 	}
-	
+
 	/**
-	 * Gets the game messages from the server 
+	 * Gets the game messages from the server
+	 * 
 	 * @return the game messages from the server
 	 * @precondition none
 	 * @postcondition none
@@ -74,9 +76,10 @@ public class Client implements Runnable {
 	public Queue<Message> getGameMessages() {
 		return this.gameMessages;
 	}
-	
+
 	/**
-	 * Gets the misc messages from the server 
+	 * Gets the misc messages from the server
+	 * 
 	 * @return the misc messages from the server
 	 * @precondition none
 	 * @postcondition none
@@ -84,8 +87,7 @@ public class Client implements Runnable {
 	public Queue<Message> getMiscMessages() {
 		return this.miscMessages;
 	}
-	
-	
+
 	/**
 	 * Sends the given serialized message to the server
 	 * 
@@ -140,7 +142,8 @@ public class Client implements Runnable {
 	}
 
 	/**
-	 * Closes the connection to the server 
+	 * Closes the connection to the server
+	 * 
 	 * @throws IOException the exception
 	 * @precondition none
 	 * @postcondition the server is closed
@@ -161,15 +164,16 @@ public class Client implements Runnable {
 	public void run() {
 		while (this.keepListening) {
 			var message = this.receiveMessage();
-			System.out.println("Recieved Message: " + message.getMessage());
-			if (message.getMessage().startsWith("LOGIN")) {
-				message.stripMessageOfType();
-				this.loginMessages.add(message);
-			} else if (message.getMessage().startsWith("GUESS")) {
-				message.stripMessageOfType();
-				this.gameMessages.add(message);
-			}  else {
-				this.miscMessages.add(message);
+			if (message != null) {
+				if (message.getMessage().startsWith("LOGIN")) {
+					message.stripMessageOfType();
+					this.loginMessages.add(message);
+				} else if (message.getMessage().startsWith("GUESS")) {
+					message.stripMessageOfType();
+					this.gameMessages.add(message);
+				} else {
+					this.miscMessages.add(message);
+				}
 			}
 		}
 

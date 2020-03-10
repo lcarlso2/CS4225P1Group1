@@ -136,7 +136,7 @@ public class GamePageController {
 	public void logout(String username) {
 		var message = new Message("QUIT---user:" + username + " ");
 		MainPageController.getClient().sendMessage(message.getSerializedMessage());
-		MainPageController.endListeningThread();
+		MainPageController.terminateThreads();
 
 	}
 
