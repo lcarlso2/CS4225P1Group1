@@ -1,5 +1,6 @@
 package controller;
 
+import io.FileReader;
 import model.GameLogic;
 import model.Server;
 
@@ -9,7 +10,10 @@ import model.Server;
  *
  */
 public class Main {
-	public static final  GameLogic GAME = new GameLogic("fantastic".toCharArray());
+	
+	public static final  FileReader READER = new FileReader();
+	public static final String GUESSWORD = READER.loadGuessWord("src/data/dictionary.txt");
+	public static final  GameLogic GAME = new GameLogic(GUESSWORD.toCharArray());
 	private static final int PORT = 4225; 
 
 	/**
@@ -19,6 +23,8 @@ public class Main {
 	 * @postcondition the program is run
 	 */
 	public static void main(String[] args) {
+		var reader = new FileReader();
+		System.out.println("game word " + GUESSWORD);
 		Server server = new Server(PORT);
 		server.openPort();
 		

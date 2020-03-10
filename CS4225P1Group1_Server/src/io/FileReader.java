@@ -3,6 +3,7 @@ package io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 import model.User;
@@ -26,6 +27,26 @@ public class FileReader {
 		return new Users(users);
 		
 	}
+	
+	public String loadGuessWord(String fileName) {
+		var words = new ArrayList<String>();
+		try (Scanner scanner = new Scanner(new File(fileName))) {
+			while (scanner.hasNextLine()) {
+				var word = scanner.nextLine();
+				if (word.length() >= 6) {
+					words.add(word);
+				}
+				
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		Random rand = new Random();
+		var gameWord = words.get(rand.nextInt(words.size()));
+		return gameWord;
+	}
+	
 	
 	private ArrayList<User> readFile(File file) {
 		var users = new ArrayList<User>();

@@ -4,9 +4,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="100.0" minWidth="100.0" prefHeight="383.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainPage">
+<AnchorPane minHeight="100.0" minWidth="100.0" prefHeight="383.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.MainPage">
    <children>
       <TextField fx:id="usernameTextField" layoutX="159.0" layoutY="115.0" onMouseClicked="#handleClick" />
       <TextField fx:id="passwordTextField" layoutX="159.0" layoutY="179.0" onMouseClicked="#handleClick" />
@@ -14,5 +15,10 @@
       <Text fx:id="passwordText" layoutX="90.0" layoutY="196.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
       <Button fx:id="loginButton" layoutX="199.0" layoutY="286.0" mnemonicParsing="false" onMouseClicked="#handleLoginClicked" prefHeight="25.0" prefWidth="69.0" text="Login" />
       <Label fx:id="errorMessageLabel" layoutX="180.0" layoutY="213.0" prefHeight="66.0" prefWidth="209.0" text="Invalid Login" textFill="RED" />
+      <Text layoutX="177.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Hangman">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

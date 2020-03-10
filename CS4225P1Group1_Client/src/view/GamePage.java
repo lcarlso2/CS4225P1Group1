@@ -1,6 +1,7 @@
 package view;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import application.Main;
 import controller.GamePageController;
@@ -9,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 
@@ -21,6 +23,7 @@ import javafx.scene.text.Text;
 public class GamePage extends Page {
 
 	private GamePageController controller;
+	private HashMap<Integer, ImageView> images;
 
 	@FXML
 	private TextArea letterToGuessTextArea;
@@ -45,6 +48,21 @@ public class GamePage extends Page {
 
 	@FXML
 	private Button logoutButton;
+	
+	@FXML
+	private ImageView gameLostImage;
+	
+	@FXML
+	private ImageView fourAttemptsLeftImage;
+	
+	@FXML
+	private ImageView threeAttemptsLeftImage;
+	
+	@FXML
+	private ImageView twoAttemptsLeftImage;
+	
+	@FXML
+	private ImageView oneAttemptLeftImage;
 	
 
 	@FXML
@@ -71,6 +89,7 @@ public class GamePage extends Page {
 	}
 
 	private void handleGameOver(String result) {
+		this.gameLostImage.setVisible(true);
 		this.serverResponseTextArea.setText(result.split(":")[0]);
 		if (result.contains(":")) {
 			this.wordToGuessLabel.setText(result.split(":")[1]);
@@ -93,10 +112,25 @@ public class GamePage extends Page {
 	 */
 	@FXML
 	void initialize() {
-		this.controller = new GamePageController(this.serverResponseTextArea, this.wordToGuessLabel, this.guessButton);
+		this.setDefaultImageVisibility();
+		this.controller = new GamePageController(this.serverResponseTextArea, this.wordToGuessLabel, this.guessButton, this.images);
 		this.errorMessageLabel.setVisible(false);
 		this.wordToGuessLabel.setText(MainPageController.getWordToGuess());
 
+	}
+	
+	private void setDefaultImageVisibility() {
+		this.images = new HashMap<Integer, ImageView>();
+		this.gameLostImage.setVisible(false);
+		this.fourAttemptsLeftImage.setVisible(false);
+		this.threeAttemptsLeftImage.setVisible(false);
+		this.twoAttemptsLeftImage.setVisible(false);
+		this.oneAttemptLeftImage.setVisible(false);
+		this.images.put(0, this.gameLostImage);
+		this.images.put(4, this.fourAttemptsLeftImage);
+		this.images.put(3, this.threeAttemptsLeftImage);
+		this.images.put(2, this.twoAttemptsLeftImage);
+		this.images.put(1, this.oneAttemptLeftImage);
 	}
 
 }
