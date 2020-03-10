@@ -174,6 +174,7 @@ public class Client implements Runnable {
 					message.stripMessageOfType();
 					this.gameMessages.add(message);
 				} else {
+					System.out.println("MISC MESSAGE IN RUN: " + message.getMessage());
 					this.miscMessages.add(message);
 				}
 			}

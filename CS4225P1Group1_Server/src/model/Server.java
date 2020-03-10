@@ -17,7 +17,6 @@ import java.util.concurrent.Executors;
 public class Server {
 	private static int port;
 	private ServerSocket serverSocket;
-	//private static ArrayList<ConnectionThread> clients;
 
 	private static long timeLeftToGuess;
 	private static volatile HashMap<String, Boolean> users;
@@ -34,7 +33,6 @@ public class Server {
 		users = new HashMap<String, Boolean>();
 		userConnections = new HashMap<String, ConnectionThread>();
 		port = connectionPort;
-		//clients = new ArrayList<ConnectionThread>();
 		this.serverSocket = null;
 
 	}

@@ -49,5 +49,6 @@
             <Image url="@../../../../../Desktop/stage6.jpg" />
          </image>
       </ImageView>
+      <TextArea fx:id="timerTextArea" editable="false" layoutX="14.0" layoutY="7.0" minHeight="51.0" minWidth="101.0" prefHeight="51.0" prefWidth="101.0" />
    </children>
 </AnchorPane>

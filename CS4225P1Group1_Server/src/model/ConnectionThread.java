@@ -49,8 +49,6 @@ public class ConnectionThread implements Runnable {
 			timer.setTerminate(true);
 			var currentPlayer = this.getCurrentPlayer();
 			this.removePlayerFromGame(currentPlayer);
-			this.setToNextPlayersTurn();
-			this.startPlayersTurn();
 		}
 	}
 
@@ -102,11 +100,10 @@ public class ConnectionThread implements Runnable {
 		var guess = incomingMessage.getMessage().split("---")[1].split(":")[1];
 		var username = incomingMessage.getMessage().split("---")[1].split(":")[0];
 		var result = this.handleGuess(guess.toCharArray()[0]);
-		System.out.println("Inside HANDLE GEUESS RESPONSE: " + result);
 		this.sendMessageBack("GUESS---" + result);
 		Server.sendAll(username + " just guessed: " + guess + System.lineSeparator() + "Guesses left "
 				+ Main.GAME.getGuessesLeft() + "##word&" + Main.GAME.getCorrectLettersSoFar(), this);
-		if (!result.contains("You won")) {
+		if (!result.contains("You won") && !result.contains("Game over")) {
 			this.startPlayersTurn();
 		}
 	}
@@ -203,15 +200,12 @@ public class ConnectionThread implements Runnable {
 
 	private String addPlayerToGame(String username) {
 		if (Main.GAME.addPlayer(username)) {
-			// Server.getClients().add(this);
 			Server.getUserConnections().put(username, this);
 			if (Server.getUsers().size() == 0) {
 				timer = new TurnThread();
 				Server.getUsers().put(username, true);
-				// Server.getUserConnections().put(username, this);
 			} else {
 				Server.getUsers().put(username, false);
-				// Server.getUserConnections().put(username, this);
 			}
 			return "valid****word:" + Main.GAME.getCorrectLettersSoFar();
 		} else {
@@ -227,7 +221,6 @@ public class ConnectionThread implements Runnable {
 	private void removePlayerFromGame(String username) {
 		Server.getUsers().remove(username);
 		Server.getUserConnections().remove(username);
-		// Server.getClients().remove(this);
 		Main.GAME.removePlayer(username);
 		Server.sendAll("server---" + username + " left game", this);
 		try {
@@ -235,6 +228,8 @@ public class ConnectionThread implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.setToNextPlayersTurn();
+		this.startPlayersTurn();
 	}
 
 	private String getUserName(Message input) {

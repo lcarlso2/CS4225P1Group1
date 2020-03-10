@@ -48,22 +48,24 @@ public class GamePage extends Page {
 
 	@FXML
 	private Button logoutButton;
-	
+
 	@FXML
 	private ImageView gameLostImage;
-	
+
 	@FXML
 	private ImageView fourAttemptsLeftImage;
-	
+
 	@FXML
 	private ImageView threeAttemptsLeftImage;
-	
+
 	@FXML
 	private ImageView twoAttemptsLeftImage;
-	
+
 	@FXML
 	private ImageView oneAttemptLeftImage;
-	
+
+	@FXML
+	private TextArea timerTextArea;
 
 	@FXML
 	void handleSendClicked(MouseEvent event) {
@@ -102,7 +104,6 @@ public class GamePage extends Page {
 		this.controller.logout(MainPageController.getCurrentUserName());
 		this.handleMouseClickToNavigateToDifferentPage(event, Main.MAIN_PAGE_VIEW);
 	}
-	
 
 	/**
 	 * Initializes the instance of the log in page
@@ -113,12 +114,13 @@ public class GamePage extends Page {
 	@FXML
 	void initialize() {
 		this.setDefaultImageVisibility();
-		this.controller = new GamePageController(this.serverResponseTextArea, this.wordToGuessLabel, this.guessButton, this.images);
+		this.controller = new GamePageController(this.serverResponseTextArea, this.wordToGuessLabel, this.guessButton,
+				this.images, this.timerTextArea);
 		this.errorMessageLabel.setVisible(false);
 		this.wordToGuessLabel.setText(MainPageController.getWordToGuess());
 
 	}
-	
+
 	private void setDefaultImageVisibility() {
 		this.images = new HashMap<Integer, ImageView>();
 		this.gameLostImage.setVisible(false);

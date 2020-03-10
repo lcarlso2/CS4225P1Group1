@@ -16,11 +16,12 @@ import model.Message;
 public class GamePageController {
 
 	private static TextArea serverResponse;
-
+	private static TextArea timer;
 	private static Label wordToGuess;
 	private static int remainingAttempts;
 	private static Button guessButton;
 	private static HashMap<Integer, ImageView> hangmanImages;
+	
 
 	/**
 	 * Creates a new game page controller with the specified output text area
@@ -29,16 +30,30 @@ public class GamePageController {
 	 * @param wordToBeGuessed   the word being guessed
 	 * @param buttonToSendGuess the button to send a guess
 	 * @param images the hangman images to display when the game is played
+	 * @param timerTextArea the timer text area
 	 * @precondition none
 	 * @postcondition a new controller is created
 	 */
 	public GamePageController(TextArea output, Label wordToBeGuessed, Button buttonToSendGuess,
-			HashMap<Integer, ImageView> images) {
+			HashMap<Integer, ImageView> images, TextArea timerTextArea) {
 		serverResponse = output;
 		wordToGuess = wordToBeGuessed;
 		guessButton = buttonToSendGuess;
 		hangmanImages = images;
 		remainingAttempts = 5;
+		timer = timerTextArea;
+	}
+	
+	
+	/**
+	 * Sets the timer text area
+	 * 
+	 * @param timerValue the timer from the server
+	 * @precondition none
+	 * @postcondition the timer text area is set
+	 */
+	public static void setTimer(String timerValue) {
+		timer.setText(timerValue);
 	}
 
 	/**
