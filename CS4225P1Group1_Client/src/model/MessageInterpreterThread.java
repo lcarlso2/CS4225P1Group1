@@ -44,19 +44,33 @@ public class MessageInterpreterThread implements Runnable {
 			while (this.runIdle) {
 				try {
 					var message = MainPageController.getClient().getMiscMessages().remove();
-					System.out.println("INSIDE RUN IDLE OF INTERPRETER: " + message.getMessage());
-					if (message.getMessage().contains("&")) {
-						Platform.runLater(() -> GamePageController.setWordBeingGuessed(message.getMessage().split("&")[1]));
+					var serverResponse = message.getMessage().split("##")[0];
+					var endGameMessage = this.handleGuessMadeByOtherPlayer(message, serverResponse);
+					if (!endGameMessage.isEmpty()) {
+						Platform.runLater(() -> GamePageController.setServerResponse(endGameMessage));
+					} else {
+						Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
 					}
-					Platform.runLater(() -> GamePageController.setServerResponse(message.getMessage().split("##")[0]));
-					
-					
 				} catch (Exception ex) {
 
 				}
-			}
-		}
 
+			}
+
+		}
+	}
+
+	private String handleGuessMadeByOtherPlayer(Message message, String serverResponse) {
+		var endGameMessage = "";
+		if (message.getMessage().contains("&")) {
+			var wordBeingGuessed = message.getMessage().split("&")[1];
+			if (!wordBeingGuessed.contains("_")) {
+				serverResponse = serverResponse.split(" ")[0] + " won!";
+				Platform.runLater(() -> GamePageController.disableGuessButton());
+			}
+			Platform.runLater(() -> GamePageController.setWordBeingGuessed(wordBeingGuessed));
+		}
+		return endGameMessage;
 	}
 
 }

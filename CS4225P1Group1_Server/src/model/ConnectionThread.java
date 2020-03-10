@@ -116,6 +116,9 @@ public class ConnectionThread implements Runnable {
 					Server.sendAll(username + " just guessed: " + guess + System.lineSeparator() + "Guesses left " + Main.GAME.getGuessesLeft() + "##word&" + Main.GAME.getCorrectLettersSoFar(), this);
 				} else if (messageType.equals("QUIT")) {
 					this.logout(incomingMessage);
+					this.close();
+					Server.getClients().remove(this);
+					
 				}
 			}
 		} catch (IOException e) {

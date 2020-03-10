@@ -91,7 +91,7 @@ public class GamePage extends Page {
 	 */
 	@FXML
 	void initialize() {
-		this.controller = new GamePageController(this.serverResponseTextArea, this.wordToGuessLabel);
+		this.controller = new GamePageController(this.serverResponseTextArea, this.wordToGuessLabel, this.guessButton);
 		this.errorMessageLabel.setVisible(false);
 		this.wordToGuessLabel.setText(MainPageController.getWordToGuess());
 

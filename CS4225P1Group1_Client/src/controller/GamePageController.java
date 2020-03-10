@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import model.Message;
@@ -14,17 +15,21 @@ public class GamePageController {
 	private static TextArea serverResponse;
 	
 	private static Label wordToGuess;
+	
+	private static Button guessButton;
 
 	/**
 	 * Creates a new game page controller with the specified output text area
 	 * @param output the output
 	 * @param wordToBeGuessed the word being guessed
+	 * @param buttonToSendGuess the button to send a guess
 	 * @precondition none
 	 * @postcondition a new controller is created
 	 */
-	public GamePageController(TextArea output, Label wordToBeGuessed) {
+	public GamePageController(TextArea output, Label wordToBeGuessed, Button buttonToSendGuess) {
 		serverResponse = output;
 		wordToGuess = wordToBeGuessed;
+		guessButton = buttonToSendGuess;
 	}
 	
 	/**
@@ -45,6 +50,15 @@ public class GamePageController {
 	 */
 	public static void setWordBeingGuessed(String word) {
 		wordToGuess.setText(word);
+	}
+	
+	/**
+	 * Sets the guess button to disabled
+	 * @precondition none
+	 * @postcondition the button is disabled
+	 */
+	public static void disableGuessButton() {
+		guessButton.setDisable(true);
 	}
 	
 	
