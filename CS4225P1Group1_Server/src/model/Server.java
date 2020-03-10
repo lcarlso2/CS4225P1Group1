@@ -58,7 +58,6 @@ public class Server {
 			while (true) {
 				var clientSocket = this.serverSocket.accept();
 				var serverThread = new ConnectionThread(clientSocket);
-				//clients.add(serverThread);
 				pool.execute(serverThread);
 			}
 

@@ -50,6 +50,9 @@ public class MainPage extends Page {
 		} else if (result.startsWith("Error")) {
 			this.errorMessageLabel.setText(result);
 			this.errorMessageLabel.setVisible(true);
+		} else if (result.startsWith("Game room")) {
+			this.errorMessageLabel.setText(result);
+			this.errorMessageLabel.setVisible(true);
 		} else {
 			this.errorMessageLabel.setVisible(true);
 		}

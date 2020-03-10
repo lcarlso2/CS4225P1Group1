@@ -56,8 +56,8 @@ public class Client implements Runnable {
 	}
 
 	/**
-	 * Gets the messages from the server 
-	 * @return the messages from the server
+	 * Gets the login messages from the server 
+	 * @return the login messages from the server
 	 * @precondition none
 	 * @postcondition none
 	 */
@@ -66,8 +66,8 @@ public class Client implements Runnable {
 	}
 	
 	/**
-	 * Gets the messages from the server 
-	 * @return the messages from the server
+	 * Gets the game messages from the server 
+	 * @return the game messages from the server
 	 * @precondition none
 	 * @postcondition none
 	 */
@@ -76,14 +76,16 @@ public class Client implements Runnable {
 	}
 	
 	/**
-	 * Gets the messages from the server 
-	 * @return the messages from the server
+	 * Gets the misc messages from the server 
+	 * @return the misc messages from the server
 	 * @precondition none
 	 * @postcondition none
 	 */
 	public Queue<Message> getMiscMessages() {
 		return this.miscMessages;
 	}
+	
+	
 	/**
 	 * Sends the given serialized message to the server
 	 * 
@@ -166,7 +168,7 @@ public class Client implements Runnable {
 			} else if (message.getMessage().startsWith("GUESS")) {
 				message.stripMessageOfType();
 				this.gameMessages.add(message);
-			} else {
+			}  else {
 				this.miscMessages.add(message);
 			}
 		}

@@ -9,6 +9,8 @@ import java.util.HashMap;
  *
  */
 public class GameLogic {
+	
+	public static final int MAX_PLAYERS = 2;
 	private static volatile HashMap<String, Boolean> players;
 	private char[] wordToGuess;
 	private char[] correctLettersSoFar;
@@ -52,6 +54,14 @@ public class GameLogic {
 	}
 	
 	/**
+	 * Gets players
+	 * @return the players
+	 */
+	public static HashMap<String, Boolean> getPlayers() {
+		return players;
+	}
+	
+	/**
 	 * Checks if all the letters have been guessed. 
 	 * @return Returns true if they have otherwise false
 	 */
@@ -90,10 +100,6 @@ public class GameLogic {
 	 * @return true if the word was in the word
 	 */
 	public boolean makeGuess(char guess) {
-//		if (this.checkIfLetterWasAlreadyGuessed(guess)) {
-//			//return "You already guessed " + guess;
-//			return false;
-//		}
 		var wasGuessRight = false;
 		for (int i = 0; i < this.wordToGuess.length; i++) {
 			if (this.wordToGuess[i] == guess) {
@@ -108,13 +114,6 @@ public class GameLogic {
 		}
 		
 		return wasGuessRight;
-		
-//		if (correct) {
-//			return new String(correctLettersSoFar);
-//		} else {
-//			this.guesses -= 1;
-//			return "Uh-oh, you guessed wrong. You have " + (this.guesses) + " guess(es) left";
-//		}
 	}
 
 	/**

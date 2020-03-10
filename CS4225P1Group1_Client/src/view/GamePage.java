@@ -45,6 +45,7 @@ public class GamePage extends Page {
 
 	@FXML
 	private Button logoutButton;
+	
 
 	@FXML
 	void handleSendClicked(MouseEvent event) {
@@ -82,6 +83,7 @@ public class GamePage extends Page {
 		this.controller.logout(MainPageController.getCurrentUserName());
 		this.handleMouseClickToNavigateToDifferentPage(event, Main.MAIN_PAGE_VIEW);
 	}
+	
 
 	/**
 	 * Initializes the instance of the log in page

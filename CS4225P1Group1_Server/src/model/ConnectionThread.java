@@ -31,6 +31,9 @@ public class ConnectionThread implements Runnable {
 	}
 
 	private String login(Message message) {
+		if (GameLogic.getPlayers().size() == GameLogic.MAX_PLAYERS) {
+			return "Game room full-" + System.lineSeparator() + "please try again later.";
+		}
 		var messageSplitUserData = message.getMessage().split("---")[1];
 		var username = this.getUserName(message);
 		var password = messageSplitUserData.split(" ")[1].split(":")[1];
@@ -118,8 +121,7 @@ public class ConnectionThread implements Runnable {
 					this.logout(incomingMessage);
 					this.close();
 					Server.getClients().remove(this);
-					
-				}
+				} 
 			}
 		} catch (IOException e) {
 			System.err.println("IOException:  " + e);
