@@ -46,6 +46,7 @@ public class MessageInterpreterThread implements Runnable {
 	private String handleGuessMadeByOtherPlayer(Message message, String serverResponse) {
 		var endGameMessage = "";
 		if (message.getMessage().contains("&")) {
+			Platform.runLater(() -> GamePageController.enableGuessButton());
 			var wordBeingGuessed = message.getMessage().split("&")[1];
 			if (!wordBeingGuessed.contains("_")) {
 				serverResponse = serverResponse.split(" ")[0] + " won!";
