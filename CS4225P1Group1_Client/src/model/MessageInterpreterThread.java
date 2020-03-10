@@ -30,6 +30,7 @@ public class MessageInterpreterThread implements Runnable {
 		while (!this.terminate) {
 			try {
 				var message = MainPageController.getClient().getMiscMessages().remove();
+				System.out.println("MESSAGE IN INTERPRETER: " + message.getMessage());
 				var serverResponse = message.getMessage().split("##")[0];
 				var endGameMessage = this.handleGuessMadeByOtherPlayer(message, serverResponse);
 				if (!endGameMessage.isEmpty()) {

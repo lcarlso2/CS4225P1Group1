@@ -3,6 +3,8 @@ package model;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -19,17 +21,28 @@ public class Server {
 	private ServerSocket serverSocket;
 	private static ArrayList<ConnectionThread> clients;
 
+	public static long timeLeftToGuess;
+	public static ExecutorService pool;
+	public static volatile HashMap<String, Boolean> users;
+	public static HashMap<String, ConnectionThread> userConnections;
+	
+
+
 	/**
 	 * Creates a new Server with a specific port to use when it runs
 	 * 
 	 * @param connectionPort the port to use when the server runs
 	 */
 	public Server(int connectionPort) {
+		users = new HashMap<String, Boolean>();
+		userConnections = new HashMap<String, ConnectionThread>();
 		port = connectionPort;
 		clients = new ArrayList<ConnectionThread>();
 		this.serverSocket = null;
 
 	}
+	
+
 	
 	/**
 	 * Gets the clients 
@@ -54,7 +67,7 @@ public class Server {
 		}
 		try {
 
-			var pool = Executors.newCachedThreadPool();
+			pool = Executors.newCachedThreadPool();
 			while (true) {
 				var clientSocket = this.serverSocket.accept();
 				var serverThread = new ConnectionThread(clientSocket);
