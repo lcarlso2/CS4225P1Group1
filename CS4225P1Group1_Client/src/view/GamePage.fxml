@@ -8,10 +8,10 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane minHeight="100.0" minWidth="100.0" prefHeight="383.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GamePage">
+<AnchorPane minHeight="100.0" minWidth="100.0" prefHeight="383.0" prefWidth="467.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.GamePage">
    <children>
       <TextArea fx:id="letterToGuessTextArea" layoutX="219.0" layoutY="224.0" prefHeight="16.0" prefWidth="26.0" />
-      <Button fx:id="guessButton" layoutX="216.0" layoutY="271.0" mnemonicParsing="false" onMouseClicked="#handleSendClicked" text="Guess" />
+      <Button fx:id="guessButton" disable="true" layoutX="216.0" layoutY="271.0" mnemonicParsing="false" onMouseClicked="#handleSendClicked" text="Guess" />
       <Label layoutX="138.0" layoutY="52.0" prefHeight="25.0" prefWidth="101.0" text="Word to guess:" />
       <Label fx:id="wordToGuessLabel" layoutX="227.0" layoutY="52.0" prefHeight="25.0" prefWidth="153.0" />
       <Label fx:id="usedLabel" layoutX="139.0" layoutY="207.0" text="Letters used:" />

@@ -28,6 +28,13 @@ public class FileReader {
 		
 	}
 	
+	/**
+	 * Loads the word to be guessed from the given file
+	 * @param fileName the file name the word is loaded from
+	 * @precondition none
+	 * @postcondition none
+	 * @return the word
+	 */
 	public String loadGuessWord(String fileName) {
 		var words = new ArrayList<String>();
 		try (Scanner scanner = new Scanner(new File(fileName))) {

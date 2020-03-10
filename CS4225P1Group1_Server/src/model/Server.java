@@ -2,9 +2,7 @@ package model;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -19,12 +17,11 @@ import java.util.concurrent.Executors;
 public class Server {
 	private static int port;
 	private ServerSocket serverSocket;
-	private static ArrayList<ConnectionThread> clients;
+	//private static ArrayList<ConnectionThread> clients;
 
-	public static long timeLeftToGuess;
-	public static ExecutorService pool;
-	public static volatile HashMap<String, Boolean> users;
-	public static HashMap<String, ConnectionThread> userConnections;
+	private static long timeLeftToGuess;
+	private static volatile HashMap<String, Boolean> users;
+	private static HashMap<String, ConnectionThread> userConnections;
 	
 
 
@@ -37,20 +34,60 @@ public class Server {
 		users = new HashMap<String, Boolean>();
 		userConnections = new HashMap<String, ConnectionThread>();
 		port = connectionPort;
-		clients = new ArrayList<ConnectionThread>();
+		//clients = new ArrayList<ConnectionThread>();
 		this.serverSocket = null;
 
 	}
 	
-
+	/**
+	 * Sets the time left to guess
+	 * @param newValue the new value
+	 * @precondition none
+	 * @postcondition the time left to guess is set
+	 */
+	public static void setTimeLeftToGuess(long newValue) {
+		timeLeftToGuess = newValue;
+	}
 	
 	/**
-	 * Gets the clients 
-	 * @return the clients
+	 * gets the time left to guess
+	 * @precondition none
+	 * @postcondition none
+	 * @return the time left to guess
 	 */
-	public static ArrayList<ConnectionThread> getClients() {
-		return clients;
+	public static long getTimeLeftToGuess() {
+		return timeLeftToGuess;
 	}
+	
+	/**
+	 * Gets the users 
+	 * @precondition none
+	 * @postcondition none
+	 * @return the users 
+	 */
+	public static HashMap<String, Boolean> getUsers() {
+		return users;
+	}
+	
+	/**
+	 * Gets the user connections
+	 * @precondition none
+	 * @postcondition none
+	 * @return the user connections 
+	 */
+	public static HashMap<String, ConnectionThread> getUserConnections() {
+		return userConnections;
+	}
+	
+
+//	
+//	/**
+//	 * Gets the clients 
+//	 * @return the clients
+//	 */
+//	public static ArrayList<ConnectionThread> getClients() {
+//		return clients;
+//	}
 
 	/**
 	 * Creates a server socket bound to the specified port
@@ -66,8 +103,7 @@ public class Server {
 			System.exit(-1);
 		}
 		try {
-
-			pool = Executors.newCachedThreadPool();
+			var pool = Executors.newCachedThreadPool();
 			while (true) {
 				var clientSocket = this.serverSocket.accept();
 				var serverThread = new ConnectionThread(clientSocket);
@@ -100,10 +136,10 @@ public class Server {
 	 */
 	public static void sendAll(String message, ConnectionThread clientRequestOriginatedFrom) {
 		System.out.println("MESSAGE BEING SENT BACK BY SERVER: " + message);
-		for (var current : clients) {
-			if (!current.equals(clientRequestOriginatedFrom)) {
+		for (var current : userConnections.keySet()) {
+			if (!userConnections.get(current).equals(clientRequestOriginatedFrom)) {
 				try {
-					current.sendMessageBack(message);
+					userConnections.get(current).sendMessageBack(message);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

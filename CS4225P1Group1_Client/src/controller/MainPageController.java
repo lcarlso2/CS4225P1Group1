@@ -1,7 +1,7 @@
 package controller;
 
 import java.io.IOException;
-
+import java.util.concurrent.TimeUnit;
 
 import model.Client;
 import model.Message;
@@ -95,8 +95,10 @@ public class MainPageController {
 		Message messageRecieved = null;
 
 		
-		while (MainPageController.getClient().getLoginMessages().isEmpty()) {
-			System.out.println("waiting in login...");
+		try {
+			TimeUnit.MILLISECONDS.sleep(500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 
 		try {

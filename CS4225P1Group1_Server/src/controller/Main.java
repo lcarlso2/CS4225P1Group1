@@ -23,7 +23,6 @@ public class Main {
 	 * @postcondition the program is run
 	 */
 	public static void main(String[] args) {
-		var reader = new FileReader();
 		System.out.println("game word " + GUESSWORD);
 		Server server = new Server(PORT);
 		server.openPort();

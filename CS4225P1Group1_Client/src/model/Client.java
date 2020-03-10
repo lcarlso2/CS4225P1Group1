@@ -118,8 +118,10 @@ public class Client implements Runnable {
 			var result = Message.getUnserializedMessage(serializedResults);
 			return result;
 		} catch (ClassNotFoundException e) {
+			this.keepListening = false;
 			System.err.println("Class not found:  " + e);
 		} catch (IOException e) {
+			this.keepListening = false;
 			System.err.println("IOException:  " + e);
 		}
 		return null;
@@ -172,7 +174,6 @@ public class Client implements Runnable {
 					message.stripMessageOfType();
 					this.gameMessages.add(message);
 				} else {
-					System.out.println("MISC MESSAGE IN CLIENT: " + message.getMessage());
 					this.miscMessages.add(message);
 				}
 			}

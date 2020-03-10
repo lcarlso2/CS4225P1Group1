@@ -49,7 +49,8 @@ public class GamePageController {
 	 * @postcondition the server response is set
 	 */
 	public static void setServerResponse(String response) {
-		serverResponse.setText(response);
+		var currentText = serverResponse.getText();
+		serverResponse.setText(response + System.lineSeparator() + currentText);
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class GamePageController {
 
 		Message messageRecieved = null;
 		while (MainPageController.getClient().getGameMessages().isEmpty()) {
-			System.out.println("waiting in guess...");
+			System.out.print("Waiting for server in makeGuess");
 		}
 
 		try {

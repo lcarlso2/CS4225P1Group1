@@ -30,11 +30,16 @@ public class MessageInterpreterThread implements Runnable {
 		while (!this.terminate) {
 			try {
 				var message = MainPageController.getClient().getMiscMessages().remove();
-				System.out.println("MESSAGE IN INTERPRETER: " + message.getMessage());
 				var serverResponse = message.getMessage().split("##")[0];
 				var endGameMessage = this.handleGuessMadeByOtherPlayer(message, serverResponse);
 				if (!endGameMessage.isEmpty()) {
 					Platform.runLater(() -> GamePageController.setServerResponse(endGameMessage));
+				} else if (message.getMessage().contains("Your turn")) {
+					Platform.runLater(() -> GamePageController.enableGuessButton());
+					Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
+				} else if (message.getMessage().contains("Times up")) {
+					Platform.runLater(() -> GamePageController.disableGuessButton());
+					Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
 				} else {
 					Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
 				}
@@ -50,7 +55,7 @@ public class MessageInterpreterThread implements Runnable {
 			Platform.runLater(() -> GamePageController.enableGuessButton());
 			var wordBeingGuessed = message.getMessage().split("&")[1];
 			if (!wordBeingGuessed.contains("_")) {
-				serverResponse = serverResponse.split(" ")[0] + " won!";
+				endGameMessage = serverResponse.split(" ")[0] + " won!";
 				Platform.runLater(() -> GamePageController.disableGuessButton());
 			}
 			Platform.runLater(() -> GamePageController.setWordBeingGuessed(wordBeingGuessed));
