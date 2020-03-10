@@ -20,7 +20,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
 			FXMLLoader loader = new FXMLLoader(); 
 			loader.setLocation(Main.class.getResource(MAIN_PAGE_VIEW));
 			loader.load();
