@@ -43,7 +43,10 @@ public class MessageInterpreterThread implements Runnable {
 					} else if (message.getMessage().contains("Times up")) {
 						Platform.runLater(() -> GamePageController.disableGuessButton());
 						Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
-					} else {
+					} else if (message.getMessage().contains("Guesses left 0")) {
+						Platform.runLater(() -> GamePageController.disableGuessButton());
+						Platform.runLater(() -> GamePageController.setServerResponse("Game Over!" + System.lineSeparator() + serverResponse));
+					} else {					
 						Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
 					}
 				}
