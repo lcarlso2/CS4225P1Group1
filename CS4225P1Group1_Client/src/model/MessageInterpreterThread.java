@@ -46,6 +46,12 @@ public class MessageInterpreterThread implements Runnable {
 					} else if (message.getMessage().contains("Guesses left 0")) {
 						Platform.runLater(() -> GamePageController.disableGuessButton());
 						Platform.runLater(() -> GamePageController.setServerResponse("Game Over!" + System.lineSeparator() + serverResponse));
+					} else if (message.getMessage().contains("Guesses left")) {
+						var split = message.getMessage().split("Guesses left ");
+						var number = Integer.parseInt(split[1].split("##")[0]);
+						GamePageController.setRemainingAttempts(number);
+						GamePageController.setHangmanImage();
+						GamePageController.setServerResponse(serverResponse);
 					} else {					
 						Platform.runLater(() -> GamePageController.setServerResponse(serverResponse));
 					}

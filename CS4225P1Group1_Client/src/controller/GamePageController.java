@@ -49,6 +49,25 @@ public class GamePageController {
 		guessedLetters = new StringBuilder();
 	}
 	
+	/**
+	 * Sets the hangman image
+	 * @precondition none
+	 * @postcondition the hangman images are set
+	 */
+	public static void setHangmanImage() {
+		hangmanImages.get(remainingAttempts).setVisible(true);
+	}
+	
+	/**
+	 *  Sets the remaining attempts to the new value
+	 *  @precondition none
+	 *  @postcondition the remaining attempts are set
+	 *  @param newValue the new value
+	 */
+	public static void setRemainingAttempts(int newValue) {
+		remainingAttempts = newValue;
+	}
+	
 	
 	/**
 	 * Sets the timer text area

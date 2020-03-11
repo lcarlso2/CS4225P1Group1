@@ -81,9 +81,11 @@ public class GamePage extends Page {
 		} else {
 			var result = this.controller.makeGuess(this.letterToGuessTextArea.getText());
 			if (this.controller.checkIfGuessWasAlreadyMade(result)) {
-				this.serverResponseTextArea.setText(result);
+				var current = this.serverResponseTextArea.getText();
+				this.serverResponseTextArea.setText(result + System.lineSeparator() + current);
 			} else if (this.controller.checkIfWrongGuessWasMade(result)) {
-				this.serverResponseTextArea.setText(result);
+				var current = this.serverResponseTextArea.getText();
+				this.serverResponseTextArea.setText(result + System.lineSeparator() + current);
 			} else if (this.controller.checkIfGameIsOver(result)) {
 				this.handleGameOver(result);
 			} else {
@@ -95,7 +97,8 @@ public class GamePage extends Page {
 
 	private void handleGameOver(String result) {
 		this.gameLostImage.setVisible(true);
-		this.serverResponseTextArea.setText(result.split(":")[0]);
+		var current = this.serverResponseTextArea.getText();
+		this.serverResponseTextArea.setText(result.split(":")[0] + System.lineSeparator() + current);
 		if (result.contains(":")) {
 			this.wordToGuessLabel.setText(result.split(":")[1]);
 		}
