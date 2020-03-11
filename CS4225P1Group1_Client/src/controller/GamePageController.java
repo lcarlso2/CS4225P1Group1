@@ -18,9 +18,11 @@ public class GamePageController {
 	private static TextArea serverResponse;
 	private static TextArea timer;
 	private static Label wordToGuess;
+	private static Label usedLettersLabel;
 	private static int remainingAttempts;
 	private static Button guessButton;
 	private static HashMap<Integer, ImageView> hangmanImages;
+	private static StringBuilder guessedLetters;
 	
 
 	/**
@@ -31,17 +33,20 @@ public class GamePageController {
 	 * @param buttonToSendGuess the button to send a guess
 	 * @param images the hangman images to display when the game is played
 	 * @param timerTextArea the timer text area
+	 * @param lettersUsedLabel label to display any letters that have been used
 	 * @precondition none
 	 * @postcondition a new controller is created
 	 */
 	public GamePageController(TextArea output, Label wordToBeGuessed, Button buttonToSendGuess,
-			HashMap<Integer, ImageView> images, TextArea timerTextArea) {
+			HashMap<Integer, ImageView> images, TextArea timerTextArea, Label lettersUsedLabel) {
 		serverResponse = output;
 		wordToGuess = wordToBeGuessed;
 		guessButton = buttonToSendGuess;
 		hangmanImages = images;
 		remainingAttempts = 5;
 		timer = timerTextArea;
+		usedLettersLabel = lettersUsedLabel;
+		guessedLetters = new StringBuilder();
 	}
 	
 	
@@ -106,10 +111,12 @@ public class GamePageController {
 	 * @return the response from the server
 	 */
 	public String makeGuess(String letterToGuess) {
+		if (!guessedLetters.toString().contains(letterToGuess + "  ")) {
+			guessedLetters.append(letterToGuess + "  ");
+			usedLettersLabel.setText(guessedLetters.toString());
+		}
 		var message = new Message("GUESS---" + MainPageController.getCurrentUserName() + ":" + letterToGuess);
-
 		MainPageController.getClient().sendMessage(message.getSerializedMessage());
-
 		Message messageRecieved = null;
 		while (MainPageController.getClient().getGameMessages().isEmpty()) {
 			System.out.print("Waiting for server in makeGuess");

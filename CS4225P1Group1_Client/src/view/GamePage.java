@@ -33,6 +33,9 @@ public class GamePage extends Page {
 
 	@FXML
 	private Label wordToGuessLabel;
+	
+	@FXML
+	private Label usedLettersLabel;
 
 	@FXML
 	private Label errorMessageLabel;
@@ -115,7 +118,7 @@ public class GamePage extends Page {
 	void initialize() {
 		this.setDefaultImageVisibility();
 		this.controller = new GamePageController(this.serverResponseTextArea, this.wordToGuessLabel, this.guessButton,
-				this.images, this.timerTextArea);
+				this.images, this.timerTextArea, this.usedLettersLabel);
 		this.errorMessageLabel.setVisible(false);
 		this.wordToGuessLabel.setText(MainPageController.getWordToGuess());
 
