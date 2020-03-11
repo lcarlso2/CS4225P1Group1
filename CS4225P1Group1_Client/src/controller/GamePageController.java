@@ -156,8 +156,11 @@ public class GamePageController {
 	public boolean checkIfWrongGuessWasMade(String message) {
 		boolean wrongGuess = message.startsWith("Uh-oh");
 		if (wrongGuess) {
-			remainingAttempts--;
-			hangmanImages.get(remainingAttempts).setVisible(true);
+			if (remainingAttempts > 0) {
+				remainingAttempts--;
+				hangmanImages.get(remainingAttempts).setVisible(true);
+			}
+			
 		}
 		return wrongGuess;
 	}
